@@ -1,0 +1,4 @@
+Basic|where is does the sidewalk end?|before the street begins;
+Basic|what color is the dress?|navy and black;
+Cloze|...i meet the wizrd|once|once i meet the wizrd;
+Cloze|where is rick?|rick|where is rick?;
