@@ -1,8 +1,3 @@
-// SETUP VARIABLES
-// Including the FS npm package
-var fs = require("fs");
-
-/************************************************/
 // FUNCTIONS
 // Creating the constructor for the cloze-deleted flashcards
 function ClozeCard(fullText, cloze, partial) {
@@ -13,8 +8,7 @@ function ClozeCard(fullText, cloze, partial) {
 		if (this.fullText.indexOf(this.cloze) === -1) {
 			console.log("Error - that doesn't exist in the full text.");
 		}
-		this.partial = this.fullText.replace(this.cloze + " ", "...");
-		console.log(this.partial);
+		this.partial = this.fullText.replace(this.cloze, "...");
 		return this.partial;
 	};
 };

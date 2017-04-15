@@ -2,35 +2,42 @@
 // Including the inquirer & FS npm packages
 var inquirer = require("inquirer");
 var fs = require("fs");
+
+// Using the require keyword to access the constructors
 var BasicCard = require("./basic.js");
 var ClozeCard = require("./cloze.js");
-//var BasicReview = require("./basicReview.js");
 
-// Variables to store data
+// Creating variables to store data
 var dataArr;
 var flashcard = [];
 var question;
 var answer;
 
+
 /************************************************/
 // FUNCTIONS
 var newBasic = function(front, back) {
-	// Creating a new object from the BasicCards constructor and user-inputs
+	// Creating a new object from the BasicCard constructor and user-input
 	var newBasic = new BasicCard(front, back);
-	  
-	var basicTxt = "\nBasic|" + front + "|" + back + ";";
-	
+	// Storing the user input
+	var basicTxt = "Basic|" + front + "|" + back + ";\n";
 	fs.appendFileSync("log.txt", basicTxt);
+	// Console logging the new instance of the BasicCard constructor
+	console.log("\nQuestion: " + newBasic.front);
+	console.log("\nAnswer: " + newBasic.back);
 };
 
 var newCloze = function(fullText, cloze) {
-	// Creating a new object from the BasicCards constructor and user-inputs
+	// Creating a new object from the ClozeCard constructor and user-input
 	var newCloze = new ClozeCard(fullText, cloze);
 	newCloze.partialCreate(cloze, fullText);
-	
-	var clozeTxt = "\nCloze|" + newCloze.partial + "|" + cloze + "|" + fullText + ";";
-
+	// Storing the user input
+	var clozeTxt = "Cloze|" + newCloze.partial + "|" + cloze + "|" + fullText + ";\n";
 	fs.appendFileSync("log.txt", clozeTxt);
+	// Console logging the new instance of the ClozeCard constructor
+	console.log("\nFull text: " + newCloze.fullText);
+	console.log("\nPartial text: " + newCloze.partial);
+	console.log("\nCloze: " + newCloze.cloze);
 };
 
 // Creating an initial prompt to determine whether the user will be creating or studying flashcards
@@ -58,6 +65,7 @@ var initialPrompt = function() {
 	});
 };
 
+// After the user selects "create", creating a prompt to determine whether the user will create basic or cloze-deleted flashcards
 var createType = function() {
 	inquirer.prompt([
 		{
@@ -108,7 +116,7 @@ var createBasicFlashcards = function() {
 			createBasicFlashcards();
 		}
 	  else {
-	  	// Displaying the user's Q&A
+	  	// Letting the user know their flashcards have been stored
 		  console.log("\n*******************************");
 	    console.log("\nYour flashcards are ready to study.\n");
 		  console.log("*******************************");
@@ -146,7 +154,7 @@ var createClozeFlashcards = function() {
 			createClozeFlashcards();
 		}
 	  else {
-	  	// Displaying the user's Q&A
+	  	// Letting the user know their flashcards have been stored
 		  console.log("\n*******************************");
 	    console.log("\nYour flashcards are ready to study.\n");
 		  console.log("*******************************");
@@ -154,6 +162,7 @@ var createClozeFlashcards = function() {
 	})
 };
 
+// If the user selects "study", running through the flashcards to study
 var studyFlashcards = function() {
 	fs.readFile(
 		"log.txt", 
@@ -163,13 +172,13 @@ var studyFlashcards = function() {
 				console.log(error);
 			}
 			// Splitting the stored data and storing each string in an array
-			dataArr = data.split(";");
+			dataArr = data.split(";\n");
 			// Storing the data into separate arrays by flashcard
 			for (var i = 0; i < dataArr.length; i++) {
 				flashcard[i] = dataArr[i].split("|");
 			}
 			// Storing a random flashcard's Q&A
-			var index = Math.floor(Math.random() * flashcard.length);
+			var index = Math.floor(Math.random() * (flashcard.length - 1));
 			question = flashcard[index][1];
 			answer = flashcard[index][2];
 			
@@ -204,4 +213,5 @@ var studyFlashcards = function() {
 
 /************************************************/
 // MAIN PROCESSES
+// Calling the initialPrompt() function
 initialPrompt();
